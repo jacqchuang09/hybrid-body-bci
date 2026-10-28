@@ -1,0 +1,22 @@
+# EEG recordings never go in the repo
+data/
+*.csv
+*.edf
+*.bdf
+*.fif
+*.gdf
+*.mat
+*.npy
+
+# MNE and MOABB download caches
+mne_data/
+.mne/
+mne_analyze.log
+
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+*.png
+!docs/*.png
