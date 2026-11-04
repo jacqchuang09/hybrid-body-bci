@@ -82,7 +82,9 @@ def to_mne(data, board_id, ch_names=None):
     info = mne.create_info(list(ch_names), sfreq, "eeg")
     raw = mne.io.RawArray(eeg, info, verbose=False)
     try:
-        raw.set_montage("standard_1020", on_missing="ignore", verbose=False)
+        from src import contract
+        raw.set_montage(contract.standard_montage("1020"), on_missing="ignore",
+                        verbose=False)
     except Exception:
         pass
     return raw
