@@ -54,7 +54,8 @@ def load_session(folder, filtered=True):
     info = mne.create_info(ch_names, sfreq, "eeg")
     raw = mne.io.RawArray(data, info, verbose=False)
     try:
-        raw.set_montage("standard_1020", on_missing="warn", verbose=False)
+        raw.set_montage(contract.standard_montage("1020"), on_missing="warn",
+                        verbose=False)
     except Exception:
         pass
 

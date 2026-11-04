@@ -42,6 +42,21 @@ TRIALS_PER_CLASS_PER_RUN = 40
 RUNS_PER_SESSION = 5
 
 
+def standard_montage(system="1020"):
+    """
+    MNE's template electrode positions for the 10-20 ("1020") or 10-05
+    ("1005") system.
+
+    MNE 1.13 renamed these from standard_* to colin27_* and drops the old
+    names in 1.14. Older MNE only has the old names, so try the new one first.
+    """
+    import mne
+
+    if f"colin27_{system}" in mne.channels.get_builtin_montages():
+        return mne.channels.make_standard_montage(f"colin27_{system}")
+    return mne.channels.make_standard_montage(f"standard_{system}")
+
+
 def describe():
     """Print the contract, for sanity-checking at the start of a session."""
     print(f"montage {MONTAGE_VERSION}: {CHANNEL_NAMES}")

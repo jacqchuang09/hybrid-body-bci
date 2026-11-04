@@ -19,6 +19,8 @@ hands vs feet.
 """
 
 import argparse
+import os
+import sys
 import warnings
 
 import numpy as np
@@ -34,6 +36,9 @@ from mne.io import concatenate_raws, read_raw_edf
 from sklearn.pipeline import Pipeline
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import StratifiedKFold, cross_val_score
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+from src.contract import standard_montage
 
 mne.set_log_level("ERROR")
 warnings.filterwarnings("ignore")
@@ -69,7 +74,7 @@ def load_subject(subject, runs, data_path):
     files = eegbci.load_data(subject, runs, path=data_path, update_path=False)
     raw = concatenate_raws([read_raw_edf(f, preload=True) for f in files])
     eegbci.standardize(raw)
-    raw.set_montage(mne.channels.make_standard_montage("standard_1005"))
+    raw.set_montage(standard_montage("1005"))
     raw.set_eeg_reference("average", projection=False)
     raw.filter(FMIN, FMAX, fir_design="firwin", skip_by_annotation="edge")
     return raw
@@ -161,7 +166,7 @@ def simulate_subject(n_trials=80, sfreq=160.0, seed=0):
     exists to prove the code path works.
     """
     rng = np.random.default_rng(seed)
-    montage = mne.channels.make_standard_montage("standard_1005")
+    montage = standard_montage("1005")
     ch_names = [c for c in CHANNEL_SETS["motor8"] + CHANNEL_SETS["stock8"]
                 + ["C1", "C2", "C5", "C6", "CPz", "Pz", "F3", "F4", "T7", "T8"]
                 if c in montage.ch_names]
